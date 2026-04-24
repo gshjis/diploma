@@ -2098,6 +2098,28 @@ docs = ["sphinx", "sphinx-autodoc-typehints", "sphinx-autorun", "sphinx-favicon"
 ros-humble = ["matplotlib (==3.5.1)", "numpy (<2)"]
 
 [[package]]
+name = "stable-baselines3"
+version = "2.9.0a2"
+description = "Pytorch version of Stable Baselines, implementations of reinforcement learning algorithms."
+optional = false
+python-versions = ">=3.10"
+files = [
+    {file = "stable_baselines3-2.9.0a2-py3-none-any.whl", hash = "sha256:69a1c8560487eae570e72498362a21880322bc0515f94d2c4422429fc7c7bde6"},
+    {file = "stable_baselines3-2.9.0a2.tar.gz", hash = "sha256:26331714770078d36afb2c4d4557ed86b512b0c149106b6b1d65ddcc86f93a24"},
+]
+
+[package.dependencies]
+cloudpickle = "*"
+gymnasium = ">=0.29.1,<2.0"
+numpy = ">=1.20,<3.0"
+torch = ">=2.3,<3.0"
+
+[package.extras]
+docs = ["myst-parser (>=4,<6)", "sphinx (>=5,<10)", "sphinx-autobuild", "sphinx-rtd-theme (>=3.0.0)", "sphinx_copybutton", "sphinxcontrib.spelling"]
+extra = ["ale-py (>=0.9.0)", "matplotlib", "opencv-python", "pandas", "pillow", "psutil", "pygame-ce", "rich", "tensorboard (>=2.9.1)", "tqdm"]
+tests = ["black (>=26.1.0,<27)", "mypy (>=1.9.0,<2)", "pytest", "pytest-cov", "pytest-env", "pytest-xdist", "ruff (>=0.5.6)"]
+
+[[package]]
 name = "stack-data"
 version = "0.6.3"
 description = "Extract data from python stack frames and tracebacks for informative displays"
@@ -2286,4 +2308,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "42ed9b5af9155c298064ccb58d300dc27e347a10a7f6a1044ce8344f425f1b95"
+content-hash = "2ee048f2b0f2fc5620febd17b7a248c0d8d3a73a9bbac05fc5ea8e0c812ef3de"

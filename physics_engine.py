@@ -6,8 +6,8 @@ import numpy as np
 @dataclass
 class Positions:
     x: np.float64 = np.float64(0.0)
-    Teta1: np.float64 = np.float64(0.0)
-    Teta2: np.float64 = np.float64(0.0)
+    Teta1: np.float64 = np.float64(0.5)
+    Teta2: np.float64 = np.float64(0.5)
 
 @dataclass
 class Velocities:
@@ -17,7 +17,7 @@ class Velocities:
 
 @dataclass
 class SystemParameters:
-    g: np.float64 = np.float64(9.81)  # положительное, знак учтём в уравнениях
+    g: np.float64 = np.float64(-9.81)
     m0: np.float64 = np.float64(5.0)
     m1: np.float64 = np.float64(0.5)
     m2: np.float64 = np.float64(0.5)
@@ -123,8 +123,10 @@ def equations_of_motion(state: State, u: float, p: SystemParameters) -> np.ndarr
     
     # Вектор гравитационных сил G(q)
     G1 = 0.0
-    G2 = (m1 + m2) * g * L1 * s1
-    G3 = m2 * g * L2 * s2
+    # Инвертируем гравитацию так, чтобы θ=0 стало "верхом".
+    # Иначе при θ=0 (sin(0)=0) модель соответствует низу.
+    G2 = -(m1 + m2) * g * L1 * s1
+    G3 = -m2 * g * L2 * s2
     
     G = np.array([G1, G2, G3], dtype=np.float64)
     

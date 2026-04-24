@@ -12,7 +12,7 @@ import sys
 import numpy as np
 import pygame
 
-from phisics_engine import Positions, SystemParameters, Velocities, State, rk4_step
+from physics_engine import Positions, SystemParameters, Velocities, State, rk4_step
 
 
 def _float(x: np.float64 | float) -> float:
@@ -52,6 +52,17 @@ def main() -> None:
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Analytical engine control (arrows -> force u)")
     clock = pygame.time.Clock()
+
+    # -------------------- SAC agent (optional) --------------------
+    model_path = "sac_cart_pendulum.zip"
+    sac_model = None
+    if model_path is not None:
+        try:
+            from stable_baselines3 import SAC
+
+            sac_model = SAC.load(model_path)
+        except Exception:
+            sac_model = None
 
     # World-to-screen mapping
     origin_x = width // 2
@@ -110,8 +121,8 @@ def main() -> None:
         # Печатаем только значения в скобках: (theta1_vis), (theta2_vis)
         state_text = (
             f"x={_float(s.pos.x):+.3f}, "
-            f"th1=({theta1_vis:+.3f}), "
-            f"th2=({theta2_vis:+.3f})"
+            f"th1=  {theta1_vis:+.3f}, "
+            f"th2={theta2_vis:+.3f}"
         )
         font = pygame.font.Font(None, 28)
         screen.blit(font.render(u_text, True, (0, 0, 0)), (15, 15))
@@ -131,12 +142,30 @@ def main() -> None:
                 break
 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            u_current = -F_MAX
-        elif keys[pygame.K_RIGHT]:
-            u_current = F_MAX
+        if sac_model is not None:
+            # agent controls u
+            obs = np.array(
+                [
+                    _float(state.pos.x),
+                    _float(state.vel.dx),
+                    _float(state.pos.Teta1),
+                    _float(state.vel.dTeta1),
+                    _float(state.pos.Teta2),
+                    _float(state.vel.dTeta2),
+                ],
+                dtype=np.float32,
+            )
+            action, _ = sac_model.predict(obs, deterministic=True)
+            # action shape=(1,)
+            u_current = float(action[0])
         else:
-            u_current = 0.0
+            # manual keyboard fallback
+            if keys[pygame.K_LEFT]:
+                u_current = -F_MAX
+            elif keys[pygame.K_RIGHT]:
+                u_current = F_MAX
+            else:
+                u_current = 0.0
 
         # Integrate in (quasi) real-time with fixed dt
         now_t = pygame.time.get_ticks()

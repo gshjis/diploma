@@ -20,6 +20,7 @@ control = "^0.10.2"
 bdsim = "^1.1.2"
 pyqt5 = "^5.15.11"
 tqdm = "^4.67.3"
+stable-baselines3 = "^2.8.0"
 
 
 [tool.poetry.group.dev.dependencies]
