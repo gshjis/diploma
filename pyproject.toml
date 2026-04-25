@@ -21,6 +21,9 @@ bdsim = "^1.1.2"
 pyqt5 = "^5.15.11"
 tqdm = "^4.67.3"
 stable-baselines3 = "^2.8.0"
+agent = {path = "agent", develop = true}
+pid = {path = "pid", develop = true}
+physics-engine = {path = "physics_engine", develop = true}
 
 
 [tool.poetry.group.dev.dependencies]
@@ -35,3 +38,6 @@ priority = "explicit"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+run-agent = "agent.main:main"
